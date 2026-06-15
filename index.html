@@ -145,14 +145,195 @@
     </div>
 
     <!-- Dashboard -->
-    <div class="container hidden" id="dashboard">
-        <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
-            <img id="userPhoto" src="" style="width:60px; height:60px; border-radius:50%; display:none;">
-            <div>
-                <h1 style="margin:0;">Welcome <span id="userName"></span></h1>
-                <p style="margin:5px 0 0 0;">Good Luck On Your Journey At HB Ride!</p>
+<div class="container hidden" id="dashboard">
+    <!-- Header -->
+    <div class="dash-header">
+        <div class="location">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span>পাংশা, রাজবাড়ী</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"/>
+            </svg>
+        </div>
+        <h2 class="app-title">HB <span>Ride</span></h2>
+        <div class="header-icons">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <img id="userPhoto" src="" class="user-avatar" style="display:none;">
+        </div>
+    </div>
+
+    <!-- Banner -->
+    <div class="banner">
+        <div class="banner-content">
+            <h3>দ্রুত রাইড বুক করুন</h3>
+            <p>নিরাপদ ও আরামদায়ক ভ্রমণ<br>আপনার যাত্রার সঙ্গী</p>
+            <button class="banner-btn">এখনই বুক করুন ›</button>
+        </div>
+        <div class="banner-car">
+            <svg width="120" height="70" viewBox="0 0 120 70">
+                <path d="M20 45 L100 45 L105 55 L15 55 Z" fill="#22c55e"/>
+                <circle cx="35" cy="55" r="8" fill="#333"/>
+                <circle cx="85" cy="55" r="8" fill="#333"/>
+                <rect x="30" y="30" width="60" height="15" rx="7" fill="#22c55e"/>
+                <rect x="40" y="20" width="40" height="12" rx="6" fill="#16a34a"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Service Category -->
+    <div class="section">
+        <div class="section-header">
+            <h4>সার্ভিস ক্যাটাগরি</h4>
+            <a>সব দেখুন ›</a>
+        </div>
+        <div class="category-scroll">
+            <div class="category-item active">
+                <div class="cat-icon">🚗</div>
+                <span>Car</span>
+            </div>
+            <div class="category-item">
+                <div class="cat-icon">🏍️</div>
+                <span>Bike</span>
+            </div>
+            <div class="category-item">
+                <div class="cat-icon">🛺</div>
+                <span>CNG</span>
+            </div>
+            <div class="category-item">
+                <div class="cat-icon">🚐</div>
+                <span>Micro</span>
+            </div>
+            <div class="category-item">
+                <div class="cat-icon">🛻</div>
+                <span>Pickup</span>
             </div>
         </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="section">
+        <h4>আপনার এলাকার ম্যাপ</h4>
+        <div class="map-box">
+            <div class="map-placeholder">
+                <svg width="100%" height="140" viewBox="0 0 300 140">
+                    <rect width="300" height="140" fill="#e8f5e9" rx="10"/>
+                    <circle cx="150" cy="70" r="8" fill="#3b82f6"/>
+                    <circle cx="150" cy="70" r="20" fill="#3b82f6" opacity="0.2">
+                        <animate attributeName="r" values="20;30;20" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <path d="M150 70 L220 50" stroke="#22c55e" stroke-width="3" stroke-dasharray="5,5"/>
+                    <circle cx="220" cy="50" r="6" fill="#22c55e"/>
+                </svg>
+                <div class="map-label top-left">📍 আপনার অবস্থান</div>
+                <div class="map-label top-right">👤 নিকটস্থ রাইডার</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Rides -->
+    <div class="section">
+        <div class="section-header">
+            <h4>সাম্প্রতিক রাইড পোস্ট</h4>
+            <a>সব দেখুন ›</a>
+        </div>
+        
+        <div class="ride-card">
+            <div class="ride-user">
+                <img src="https://i.pravatar.cc/50?img=12" alt="">
+                <div>
+                    <h5>তৌফিক হাসান</h5>
+                    <div class="rating">⭐ 4.8</div>
+                </div>
+            </div>
+            <div class="ride-info">
+                <div class="route">
+                    <div><span class="dot green"></span> পাংশা, রাজবাড়ী</div>
+                    <div><span class="dot red"></span> ঢাকা, বাংলাদেশ</div>
+                </div>
+                <div class="price">
+                    <b>৳ 250</b>
+                    <span>আজ, 10:30 AM</span>
+                </div>
+            </div>
+            <div class="ride-tags">
+                <span class="tag">Car</span>
+                <span class="tag">3 সিট খালি</span>
+            </div>
+            <div class="ride-actions">
+                <button class="action-btn">📞 কল করুন</button>
+                <button class="action-btn">💬 মেসেজ</button>
+                <button class="action-btn primary">📍 ট্র্যাক করুন</button>
+            </div>
+        </div>
+
+        <div class="ride-card">
+            <div class="ride-user">
+                <img src="https://i.pravatar.cc/50?img=33" alt="">
+                <div>
+                    <h5>রাফিকুল ইসলাম</h5>
+                    <div class="rating">⭐ 4.7</div>
+                </div>
+            </div>
+            <div class="ride-info">
+                <div class="route">
+                    <div><span class="dot green"></span> গোয়ালন্দ, রাজবাড়ী</div>
+                    <div><span class="dot red"></span> গাবতলি, ঢাকা</div>
+                </div>
+                <div class="price">
+                    <b>৳ 300</b>
+                    <span>আজ, 11:00 AM</span>
+                </div>
+            </div>
+            <div class="ride-tags">
+                <span class="tag">Car</span>
+                <span class="tag">2 সিট খালি</span>
+            </div>
+            <div class="ride-actions">
+                <button class="action-btn">📞 কল করুন</button>
+                <button class="action-btn">💬 মেসেজ</button>
+                <button class="action-btn primary">📍 ট্র্যাক করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel - শুধু এডমিন দেখবে -->
+    <div id="adminPanel" class="hidden section" style="background:#f5f5f5; padding:15px; border-radius:10px;">
+        <h4 style="color:#22c55e;">🔒 Admin Panel</h4>
+        <p style="font-size:13px;">Total Users: <b id="totalUsers">0</b></p>
+        <div id="usersList" style="text-align:left; max-height:200px; overflow:auto; font-size:14px; background:white; padding:10px; border-radius:8px; margin:10px 0;"></div>
+        <button onclick="exportUsers()" style="background:#333;">📥 Download List</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>হোম</span>
+        </div>
+        <div class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>আমার রাইড</span>
+        </div>
+        <div class="nav-item center">
+            <div class="add-btn">+</div>
+            <span>পোস্ট রাইড</span>
+        </div>
+        <div class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>মেসেজ</span>
+        </div>
+        <div class="nav-item" onclick="logout()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>প্রোফাইল</span>
+        </div>
+    </div>
+</div>
 
         <!-- Admin Panel - শুধু এডমিন দেখবে -->
         <div id="adminPanel" class="hidden" style="background:#f5f5f5; padding:15px; border-radius:10px; margin:20px 0;">
