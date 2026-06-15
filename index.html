@@ -22,19 +22,17 @@
 
     <!-- Signup Form -->
     <div class="container hidden" id="signupBox">
-        <h2>Sign Up</h2>
-        <input type="text" id="signupFirstName" placeholder="First Name">
-        <input type="text" id="signupLastName" placeholder="Last Name">
-        <input type="email" id="signupEmail" placeholder="Email">
-        <input type="password" id="signupPass" placeholder="Password">
-        <input type="password" id="signupRe-Pass" placeholder="Re-Password">
-        <p class="error" id="signupError"></p>
-        <p class="success" id="signupSuccess"></p>
-        <button onclick="signup()">Create Account</button>
-        <div class="link">
-            <a onclick="showLogin()">Already have account? Login</a>
-        </div>
+    <h2>Sign Up</h2>
+    <input type="text" id="signupName" placeholder="Full Name">
+    <input type="email" id="signupEmail" placeholder="Email">
+    <input type="password" id="signupPass" placeholder="Password">
+    <p class="error" id="signupError"></p>
+    <p class="success" id="signupSuccess"></p>
+    <button onclick="signup()">Create Account</button>
+    <div class="link">
+        <a onclick="showLogin()">Already have account? Login</a>
     </div>
+</div>
 
     <!-- Forgot Password Form -->
     <div class="container hidden" id="forgotBox">
