@@ -1,5 +1,4 @@
-// Check if already logged in
-if(localStorage.getItem('currentUser')) {
+if (localStorage.getItem('currentUser')) {
     showDashboard();
 }
 
@@ -37,30 +36,18 @@ function signup() {
     let pass = document.getElementById('signupPass').value;
     let users = JSON.parse(localStorage.getItem('users') || '{}');
 
-    if(!name ||!email ||!pass) {
+    if (!name ||!email ||!pass) {
         document.getElementById('signupError').innerText = 'সব ঘর পূরণ করেন';
         return;
     }
-
-    if(pass.length < 4) {
-        document.getElementById('signupError').innerText = 'পাসওয়ার্ড কমপক্ষে 4 অক্ষর হতে হবে';
-        return;
-    }
-
-    if(users[email]) {
+    if (users[email]) {
         document.getElementById('signupError').innerText = 'এই ইমেইল দিয়ে একাউন্ট আছে';
         return;
     }
 
     users[email] = { name: name, password: pass };
     localStorage.setItem('users', JSON.stringify(users));
-    document.getElementById('signupError').innerText = '';
     document.getElementById('signupSuccess').innerText = 'একাউন্ট তৈরি হয়েছে! লগিন করেন';
-
-    document.getElementById('signupName').value = '';
-    document.getElementById('signupEmail').value = '';
-    document.getElementById('signupPass').value = '';
-
     setTimeout(showLogin, 1500);
 }
 
@@ -69,16 +56,8 @@ function login() {
     let pass = document.getElementById('loginPass').value;
     let users = JSON.parse(localStorage.getItem('users') || '{}');
 
-    if(!email ||!pass) {
-        document.getElementById('loginError').innerText = 'ইমেইল ও পাসওয়ার্ড দেন';
-        return;
-    }
-
-    if(users[email] && users[email].password === pass) {
+    if (users[email] && users[email].password === pass) {
         localStorage.setItem('currentUser', users[email].name);
-        document.getElementById('loginEmail').value = '';
-        document.getElementById('loginPass').value = '';
-        document.getElementById('loginError').innerText = '';
         showDashboard();
     } else {
         document.getElementById('loginError').innerText = 'ইমেইল বা পাসওয়ার্ড ভুল';
@@ -90,29 +69,18 @@ function resetPassword() {
     let newPass = document.getElementById('newPass').value;
     let users = JSON.parse(localStorage.getItem('users') || '{}');
 
-    if(!email ||!newPass) {
-        document.getElementById('forgotError').innerText = 'সব ঘর পূরণ করেন';
-        return;
-    }
-
-    if(!users[email]) {
+    if (!users[email]) {
         document.getElementById('forgotError').innerText = 'এই ইমেইল দিয়ে একাউন্ট নাই';
         return;
     }
-
-    if(newPass.length < 4) {
-        document.getElementById('forgotError').innerText = 'পাসওয়ার্ড কমপক্ষে 4 অক্ষর হতে হবে';
+    if (!newPass) {
+        document.getElementById('forgotError').innerText = 'নতুন পাসওয়ার্ড দেন';
         return;
     }
 
     users[email].password = newPass;
     localStorage.setItem('users', JSON.stringify(users));
-    document.getElementById('forgotError').innerText = '';
-    document.getElementById('forgotSuccess').innerText = 'পাসওয়ার্ড চেঞ্জ হয়েছে! লগিন করেন';
-
-    document.getElementById('forgotEmail').value = '';
-    document.getElementById('newPass').value = '';
-
+    document.getElementById('forgotSuccess').innerText = 'পাসওয়ার্ড চেঞ্জ হয়েছে!';
     setTimeout(showLogin, 1500);
 }
 
