@@ -12,8 +12,8 @@
     <div class="container" id="loginBox">
         <div class="logo-section">
             <h1>HB <span>Ride</span></h1>
-            <h3>স্বাগতম</h3>
-            <p>আপনার যাত্রা শুরু করুন</p>
+            <h3>Welcome 🤝</h3>
+            <p>Start Your Journey __🏎️</p>
         </div>
 
         <div class="illustration">
@@ -29,19 +29,19 @@
         </div>
 
         <div class="form-group">
-            <label>মোবাইল নাম্বার</label>
+            <label>Mobile Number</label>
             <div class="phone-input">
                 <select>
                     <option>+880</option>
                 </select>
-                <input type="tel" id="loginMobile" placeholder="আপনার মোবাইল নাম্বার দিন">
+                <input type="tel" id="loginMobile" placeholder="Type Your Mobile Number">
             </div>
         </div>
 
         <div class="form-group">
-            <label>পাসওয়ার্ড</label>
+            <label>Password</label>
             <div class="password-input">
-                <input type="password" id="loginPass" placeholder="আপনার পাসওয়ার্ড দিন">
+                <input type="password" id="loginPass" placeholder="Type Your Password">
                 <span class="toggle-eye" onclick="togglePass()">👁️</span>
             </div>
         </div>
@@ -49,13 +49,13 @@
         <p class="error" id="loginError"></p>
 
         <div class="forgot-link">
-            <a onclick="showForgot()">পাসওয়ার্ড ভুলে গেছেন?</a>
+            <a onclick="showForgot()">Forgot your password? 🙄</a>
         </div>
 
-        <button onclick="login()">লগইন</button>
+        <button onclick="login()">Login</button>
 
         <div class="divider">
-            <span>অথবা লগইন করুন</span>
+            <span>Or Login</span>
         </div>
 
         <div class="social-login">
@@ -68,7 +68,7 @@
         </div>
 
         <div class="signup-link">
-            একাউন্ট নেই? <a onclick="showSignup()">সাইন আপ করুন</a>
+            Don't have an account?🤔 <a onclick="showSignup()">Sign Up</a>
         </div>
     </div>
 
@@ -82,8 +82,8 @@
 
         <div class="logo-section">
             <h1>HB <span>Ride</span></h1>
-            <h3>নতুন একাউন্ট তৈরি করুন</h3>
-            <p>কিছু তথ্য দিন এবং আপনার একাউন্ট তৈরি করুন</p>
+            <h3>Create New Account</h3>
+            <p>Make Yor Account With Some Information</p>
         </div>
 
         <div class="illustration">
@@ -104,7 +104,7 @@
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                     <circle cx="12" cy="7" r="4"/>
                 </svg>
-                <input type="text" id="signupName" placeholder="পুরো নাম লিখুন">
+                <input type="text" id="signupName" placeholder="Full Name">
             </div>
         </div>
 
@@ -116,7 +116,7 @@
                 <select>
                     <option>+880</option>
                 </select>
-                <input type="tel" id="signupMobile" placeholder="মোবাইল নাম্বার দিন">
+                <input type="tel" id="signupMobile" placeholder="Mobile Number">
             </div>
         </div>
 
@@ -126,7 +126,7 @@
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
-                <input type="password" id="signupPass" placeholder="পাসওয়ার্ড দিন">
+                <input type="password" id="signupPass" placeholder="Password">
                 <span class="toggle-eye" onclick="toggleSignupPass1()">👁️</span>
             </div>
         </div>
@@ -137,7 +137,7 @@
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
-                <input type="password" id="signupConfirmPass" placeholder="পাসওয়ার্ড নিশ্চিত করুন">
+                <input type="password" id="signupConfirmPass" placeholder="Confirm Password">
                 <span class="toggle-eye" onclick="toggleSignupPass2()">👁️</span>
             </div>
         </div>
@@ -147,13 +147,13 @@
 
         <div class="checkbox-group">
             <input type="checkbox" id="termsCheck">
-            <label for="termsCheck">আমি <span>শর্তাবলী</span> এবং <span>গোপনীয়তা নীতিমালা</span> অনুমত।</label>
+            <label for="termsCheck">I Agree To The Terms And Privacy Policy</label>
         </div>
 
-        <button onclick="signup()">সাইন আপ</button>
+        <button onclick="signup()">Sign Up</button>
 
         <div class="divider">
-            <span>অথবা সাইন আপ করুন</span>
+            <span>Or Sign Up</span>
         </div>
 
         <div class="social-login">
@@ -166,15 +166,15 @@
         </div>
 
         <div class="signup-link">
-            আগে থেকেই একাউন্ট আছে? <a onclick="showLogin()">লগইন করুন</a>
+            Allready Have An Account? <a onclick="showLogin()">Login</a>
         </div>
     </div>
 
     <!-- Dashboard -->
     <div class="container hidden" id="dashboard">
-        <h1>স্বাগতম <span id="userName"></span></h1>
-        <p>HB Ride এ আপনার যাত্রা শুভ হোক!</p>
-        <button onclick="logout()">লগআউট</button>
+        <h1>Welcome <span id="userName"></span></h1>
+        <p>Good Luck On Your Journey At HB Ride!</p>
+        <button onclick="logout()">Log Out</button>
     </div>
 
     <script src="script.js"></script>
