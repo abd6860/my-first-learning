@@ -1,25 +1,61 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>My First Website</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login System</title>
     <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <h1>Asslamu Alaikum. I'm Abdullah</h1>
-    <p>Ami web development shikhtechi</p>
-    <h2>Today 14/06/2026</h2>
-    <p>amar shekhar journey Ajk Shuru Korlam</p>
-    <h2>DOa Korben</h2>
-    <button onclick="thankYou()">Thank You</button>
-    <p id="message"></p>
+</head>
+<body>
+    <!-- Login Form -->
+    <div class="container" id="loginBox">
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPass" placeholder="Password">
+        <p class="error" id="loginError"></p>
+        <button onclick="login()">Login</button>
+        <div class="link">
+            <a onclick="showForgot()">Forgot Password?</a> |
+            <a onclick="showSignup()">Sign Up</a>
+        </div>
+    </div>
 
-    <script>
-      function thankYou() {
-        document.getElementById("message").innerText = "আপনাকেও ধন্যবাদ স্যার! দোয়া কইরেন 🤲";
-        document.getElementById("message").style.color = "#feca57";
-        document.getElementById("message").style.fontSize = "24px";
-        document.getElementById("message").style.marginTop = "20px";
-      }
-    </script>
-  </body>
+    <!-- Signup Form -->
+    <div class="container hidden" id="signupBox">
+        <h2>Sign Up</h2>
+        <input type="text" id="signupFirstName" placeholder="First Name">
+        <input type="text" id="signupLastName" placeholder="Last Name">
+        <input type="email" id="signupEmail" placeholder="Email">
+        <input type="password" id="signupPass" placeholder="Password">
+        <input type="password" id="signupRe-Pass" placeholder="Re-Password">
+        <p class="error" id="signupError"></p>
+        <p class="success" id="signupSuccess"></p>
+        <button onclick="signup()">Create Account</button>
+        <div class="link">
+            <a onclick="showLogin()">Already have account? Login</a>
+        </div>
+    </div>
+
+    <!-- Forgot Password Form -->
+    <div class="container hidden" id="forgotBox">
+        <h2>Reset Password</h2>
+        <input type="email" id="forgotEmail" placeholder="Enter your email">
+        <input type="password" id="newPass" placeholder="New Password">
+        <p class="error" id="forgotError"></p>
+        <p class="success" id="forgotSuccess"></p>
+        <button onclick="resetPassword()">Reset Password</button>
+        <div class="link">
+            <a onclick="showLogin()">Back to Login</a>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="container hidden" id="dashboard">
+        <h2>Welcome, <span id="userName"></span>!</h2>
+        <p>Login Success</p>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
 </html>
