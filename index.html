@@ -197,34 +197,122 @@
             </div>
         </div>
         <!-- Service Category -->
-        <div class="section">
-            <div class="section-header">
-                <h4>সার্ভিস ক্যাটাগরি</h4>
-                <a>সব দেখুন ›</a>
-            </div>
-            <div class="category-scroll">
-                <div class="category-item active">
-                    <div class="cat-icon">🚗</div>
-                    <span>Car</span>
-                </div>
-                <div class="category-item">
-                    <div class="cat-icon">🏍️</div>
-                    <span>Bike</span>
-                </div>
-                <div class="category-item">
-                    <div class="cat-icon">🛺</div>
-                    <span>CNG</span>
-                </div>
-                <div class="category-item">
-                    <div class="cat-icon">🚐</div>
-                    <span>Micro</span>
-                </div>
-                <div class="category-item">
-                    <div class="cat-icon">🛻</div>
-                    <span>Pickup</span>
-                </div>
+        <!-- Booking Section -->
+<div class="section" id="bookingSection">
+    <div class="section-header">
+        <h4>🚗 গাড়ি বুক করুন</h4>
+    </div>
+    
+    <!-- Booking Form -->
+    <form id="bookingForm" class="booking-form">
+        <div class="form-group">
+            <label>পিকআপ লোকেশন</label>
+            <input type="text" id="pickupLocation" placeholder="যেমন: পাংশা বাজার" required>
+        </div>
+        
+        <div class="form-group">
+            <label>ড্রপ লোকেশন</label>
+            <input type="text" id="dropLocation" placeholder="যেমন: ঢাকা এয়ারপোর্ট" required>
+        </div>
+        
+        <div class="form-group">
+            <label>ট্রিপ টাইপ</label>
+            <div class="trip-type">
+                <label><input type="radio" name="tripType" value="oneway" checked> One Way</label>
+                <label><input type="radio" name="tripType" value="roundtrip"> Round Trip</label>
             </div>
         </div>
+        
+        <div class="form-group">
+            <label>তারিখ ও সময়</label>
+            <input type="datetime-local" id="bookingDateTime" required>
+        </div>
+        
+        <div class="form-group">
+            <label>যাত্রী সংখ্যা</label>
+            <select id="passengerCount">
+                <option value="1">1 জন</option>
+                <option value="2">2 জন</option>
+                <option value="3">3 জন</option>
+                <option value="4" selected>4 জন</option>
+                <option value="10">10 জন</option>
+            </select>
+        </div>
+        
+        <button type="button" id="checkFareBtn" class="primary-btn">ভাড়া দেখুন</button>
+    </form>
+    
+    <!-- Car Selection - Hidden First -->
+    <div id="carSelection" class="hidden">
+        <h4>গাড়ি সিলেক্ট করুন</h4>
+        <div class="car-list">
+            <!-- Sedan -->
+            <div class="car-card" data-car="Sedan" data-price="40">
+                <div class="car-img">🚗</div>
+                <div class="car-info">
+                    <h5>Sedan - AC</h5>
+                    <p>4 সিট | কমফোর্ট রাইড</p>
+                    <b class="car-fare">৳ 0</b>
+                </div>
+                <button class="select-car-btn">সিলেক্ট</button>
+            </div>
+            
+            <!-- Hiace -->
+            <div class="car-card" data-car="Hiace" data-price="70">
+                <div class="car-img">🚐</div>
+                <div class="car-info">
+                    <h5>Hiace Micro - AC</h5>
+                    <p>10 সিট | ফ্যামিলি/গ্রুপ</p>
+                    <b class="car-fare">৳ 0</b>
+                </div>
+                <button class="select-car-btn">সিলেক্ট</button>
+            </div>
+            
+            <!-- Bike -->
+            <div class="car-card" data-car="Bike" data-price="15">
+                <div class="car-img">🏍️</div>
+                <div class="car-info">
+                    <h5>Bike</h5>
+                    <p>1 সিট | দ্রুত যাতায়াত</p>
+                    <b class="car-fare">৳ 0</b>
+                </div>
+                <button class="select-car-btn">সিলেক্ট</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Passenger Details - Hidden First -->
+    <div id="passengerDetails" class="hidden">
+        <h4>যাত্রীর তথ্য</h4>
+        <form id="confirmBookingForm">
+            <div class="form-group">
+                <input type="text" id="customerName" placeholder="আপনার নাম" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" id="customerMobile" placeholder="মোবাইল নাম্বার" required>
+            </div>
+            <div class="form-group">
+                <textarea id="specialNote" placeholder="স্পেশাল নোট - যেমন: 2টা লাগেজ"></textarea>
+            </div>
+            <div class="fare-summary">
+                <p>মোট ভাড়া: <b id="totalFare">৳ 0</b></p>
+                <p class="note">* ড্রাইভার 10 মিনিট আগে কল দিবে</p>
+            </div>
+            <button type="submit" class="primary-btn">বুকিং কনফার্ম করুন</button>
+            <button type="button" id="backToCarBtn" class="secondary-btn">পিছনে যান</button>
+        </form>
+    </div>
+</div>
+
+<!-- My Bookings Section -->
+<div class="section" id="myBookings">
+    <div class="section-header">
+        <h4>আমার বুকিং</h4>
+    </div>
+    <div id="bookingsList">
+        <p style="text-align:center;color:#999;">এখনো কোনো বুকিং নাই</p>
+    </div>
+</div>
         <!-- Map Section -->
         <div class="section">
             <h4>আপনার এলাকার ম্যাপ</h4>
