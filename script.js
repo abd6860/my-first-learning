@@ -1,25 +1,17 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'
-import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithRedirect,
-    getRedirectResult,
-    signOut
-} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js'
-
-// ⚠️ স্যার, এখানে আপনার Firebase Config বসান
+// ⚠️ Firebase Config - আপনার প্রজেক্টের
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBZtof8PCCAGqGGuPkH_aNSsIayEDLru3U",
+  authDomain: "hb-ride-a9b5d.firebaseapp.com",
+  projectId: "hb-ride-a9b5d",
+  storageBucket: "hb-ride-a9b5d.firebasestorage.app",
+  messagingSenderId: "541954546180",
+  appId: "1:541954546180:web:b176f507a4271add44b351"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 
 // ⚠️ এডমিন ইমেইল
@@ -43,11 +35,11 @@ const toggleSignupPass1 = document.getElementById('toggleSignupPass1');
 const toggleSignupPass2 = document.getElementById('toggleSignupPass2');
 const exportUsersBtn = document.getElementById('exportUsersBtn');
 
-// পেজ লোড হলে Google Redirect রেজাল্ট চেক
+// পেজ লোড হলে ইউজার চেক
 window.addEventListener('load', () => {
-    getRedirectResult(auth).then((result) => {
-        if (result) {
-            const user = result.user;
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            // Google দিয়ে লগইন করা ইউজার
             let users = JSON.parse(localStorage.getItem('users') || '{}');
             users[user.email] = {
                 name: user.displayName,
@@ -59,11 +51,9 @@ window.addEventListener('load', () => {
             localStorage.setItem('currentUser', user.email);
             showDashboard();
         } else if (localStorage.getItem('currentUser')) {
+            // মোবাইল দিয়ে লগইন করা ইউজার
             showDashboard();
         }
-    }).catch((error) => {
-        console.error("Google Login Error:", error);
-        document.getElementById('loginError').innerText = 'Google login failed';
     });
 });
 
@@ -93,8 +83,7 @@ function showDashboard() {
     let users = JSON.parse(localStorage.getItem('users') || '{}');
     let userData = users[currentUser];
 
-    document.getElementById('userNameDisplay').innerText = userData?.name || '';
-
+    // User Avatar সেট করা
     const userAvatar = document.getElementById('userAvatar');
     if (userData?.photo) {
         userAvatar.src = userData.photo;
@@ -191,14 +180,22 @@ function handleLogin(e) {
     showDashboard();
 }
 
-// Google Login
+// Google Login - Popup ব্যবহার করছি, Redirect এর চেয়ে সহজ
 function handleGoogleLogin() {
-    signInWithRedirect(auth, provider);
+    auth.signInWithPopup(provider)
+       .then((result) => {
+            // onAuthStateChanged এ অটো হ্যান্ডেল হবে
+            console.log("Google Login Success:", result.user.displayName);
+        })
+       .catch((error) => {
+            console.error("Google Login Error:", error);
+            document.getElementById('loginError').innerText = 'Google login failed: ' + error.message;
+        });
 }
 
 // Logout
 function handleLogout() {
-    signOut(auth).then(() => {
+    auth.signOut().then(() => {
         localStorage.removeItem('currentUser');
         dashboard.classList.add('hidden');
         loginBox.classList.remove('hidden');
