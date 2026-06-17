@@ -1,20 +1,20 @@
-// ===== FIREBASE CONFIG - আপনার real config বসান =====
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBZtof8PCCAGqGGuPkH_aNSsIayEDLru3U",
+  authDomain: "hb-ride-a9b5d.firebaseapp.com",
+  projectId: "hb-ride-a9b5d",
+  storageBucket: "hb-ride-a9b5d.firebasestorage.app",
+  messagingSenderId: "541954546180",
+  appId: "1:541954546180:web:b176f507a4271add44b351"
 };
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-const googleProvider = new firebase.auth.GoogleAuthProvider();
-
-let isSignup = false;
-let currentUser = null;
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
 // DOM
 const loginBtn = document.getElementById('loginBtn');
