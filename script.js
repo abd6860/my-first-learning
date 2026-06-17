@@ -14,7 +14,13 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+let isSignup = false;
+let currentUser = null;
 
 // DOM
 const loginBtn = document.getElementById('loginBtn');
