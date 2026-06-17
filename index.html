@@ -8,12 +8,11 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar">
   <div class="nav-container">
     <div class="logo">🚗 HB Ride</div>
     <div class="nav-right">
-      <span id="userPhone" class="hidden"></span>
+      <span id="userEmail" class="hidden"></span>
       <button class="nav-btn" id="loginBtn">login</button>
       <button class="nav-btn hidden" id="logoutBtn">Logout</button>
       <button class="hamburger" id="menuBtn">☰</button>
@@ -21,16 +20,14 @@
   </div>
 </nav>
 
-<!-- Landing / Booking Section -->
+<!-- Landing -->
 <div id="landingPage">
   <section class="hero">
     <h1>Freedom in Every Journey</h1>
     <p>Premium car rental with professional drivers</p>
-    
-    <div class="booking-card" id="bookingCard">
-      <div class="tabs">
-        <button class="tab active">Car Rental</button>
-      </div>
+
+    <div class="booking-card">
+      <div class="tabs"><button class="tab active">Car Rental</button></div>
       <div class="form-grid">
         <div class="form-group">
           <label>Choose a Car</label>
@@ -41,24 +38,15 @@
             <option value="Microbus">Microbus - ৳45/km</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Pickup Location</label>
-          <input type="text" id="pickup" placeholder="Enter pickup">
-        </div>
-        <div class="form-group">
-          <label>Drop Location</label>
-          <input type="text" id="drop" placeholder="Enter drop">
-        </div>
-        <div class="form-group">
-          <label>Date & Time</label>
-          <input type="datetime-local" id="datetime">
-        </div>
+        <div class="form-group"><label>Pickup</label><input type="text" id="pickup"></div>
+        <div class="form-group"><label>Drop</label><input type="text" id="drop"></div>
+        <div class="form-group"><label>Date & Time</label><input type="datetime-local" id="datetime"></div>
         <button class="search-btn" id="searchBtn">Search & Book</button>
       </div>
     </div>
   </section>
 
-  <!-- Passenger Dashboard - hidden until login -->
+  <!-- Dashboard -->
   <section class="section hidden" id="dashboard">
     <h2 class="section-title">My Dashboard</h2>
     <div class="dashboard-grid">
@@ -68,39 +56,49 @@
       </div>
       <div class="dash-card">
         <h3>👤 Profile</h3>
-        <p><b>Phone:</b> <span id="profilePhone">-</span></p>
-        <p><b>Status:</b> Verified Passenger</p>
+        <p><b>Email:</b> <span id="profileEmail">-</span></p>
+        <p><b>Name:</b> <span id="profileName">-</span></p>
       </div>
     </div>
   </section>
 </div>
 
-<!-- Login Modal with OTP -->
-<div class="modal hidden" id="loginModal">
+<!-- Auth Modal - Email + Google -->
+<div class="modal hidden" id="authModal">
   <div class="modal-content">
     <div class="modal-header">
-      login
+      <span id="modalTitle">login</span>
       <button class="close-btn" id="closeModal">×</button>
     </div>
-    <div class="modal-body" id="phoneStep">
-      <label>Enter Your Phone Number</label>
-      <div class="phone-input">
-        <select><option>🇧🇩 +880</option></select>
-        <input type="tel" id="phoneInput" placeholder="1XXXXXXXXX" maxlength="10">
+    <div class="modal-body">
+
+      <!-- Google Button -->
+      <button class="google-btn" id="googleBtn">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.66-.06-1.3-.17-1.92H9v3.63h4.84c-.21 1.12-.83 2.07-1.77 2.71v2.25h2.86c1.67-1.54 2.64-3.81 2.64-6.47z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.86-2.25c-.79.53-1.8.85-3.1.85-2.38 0-4.4-1.61-5.12-3.77H.96v2.37C2.43 16.18 5.48 18 9 18z"/><path fill="#FBBC04" d="M3.88 10.65c-.18-.53-.29-1.1-.29-1.68s.11-1.15.29-1.68V4.92H.96C.35 6.13 0 7.54 0 9s.35 2.87.96 4.08l2.92-2.43z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.34l2.58-2.58C13.46.96 11.42 0 9 0 5.48 0 2.43 1.82.96 4.92l2.92 2.37C4.6 5.19 6.62 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="divider"><span>or</span></div>
+
+      <!-- Email/Password Form -->
+      <div id="authForm">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="emailInput" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="passwordInput" placeholder="6+ characters">
+        </div>
+        <div class="form-group hidden" id="nameField">
+          <label>Full Name</label>
+          <input type="text" id="nameInput" placeholder="Your Name">
+        </div>
+
+        <button class="modal-btn" id="submitBtn">Login</button>
+        <p class="switch-text">New here? <a href="#" id="switchLink">Create account</a></p>
+        <p id="authError" class="error"></p>
       </div>
-      <small>OTP যাবে এই নাম্বারে</small>
-      <div id="recaptcha-container"></div>
-      <button class="modal-btn" id="sendOtpBtn">Send Code</button>
-    </div>
-    <div class="modal-body hidden" id="otpStep">
-      <label>Enter 6-digit OTP</label>
-      <div class="otp-inputs">
-        <input type="text" maxlength="1"><input type="text" maxlength="1">
-        <input type="text" maxlength="1"><input type="text" maxlength="1">
-        <input type="text" maxlength="1"><input type="text" maxlength="1">
-      </div>
-      <button class="modal-btn" id="verifyBtn">Continue</button>
-      <p id="otpError" class="error"></p>
     </div>
   </div>
 </div>
