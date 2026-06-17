@@ -1,4 +1,3 @@
-// ⚠️ Firebase Config
 const firebaseConfig = {
     apiKey: "AIzaSyBZtof8PCCAGqGGuPkH_aNSsIayEDLru3U",
     authDomain: "hb-ride-a9b5d.firebaseapp.com",
@@ -7,534 +6,178 @@ const firebaseConfig = {
     messagingSenderId: "541954546180",
     appId: "1:541954546180:web:b176f507a4271add44b351"
 };
-
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
 const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
-
-// ⚠️ Admin Email
 const ADMIN_EMAIL = "dustotuhin2021@gmail.com";
 
-// Global Variables
 let currentUserData = null;
+let selectedCar = null;
 
-// Helper: Generate Unique Username
-function generateUsername(name) {
-    const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const randomNum = Math.floor(1000 + Math.random() * 9000);
-    return `${cleanName}${randomNum}`;
-}
+// Helpers
+const $ = id => document.getElementById(id);
+const show = el => el.classList.remove('hidden');
+const hide = el => el.classList.add('hidden');
+const generateUsername = name => name.toLowerCase().replace(/[^a-z0-9]/g,'') + Math.floor(1000+Math.random()*9000);
+const isEmail = str => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str);
 
-// Helper: Check if Email or Mobile
-function isEmail(input) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
-}
-
-// Page Load
-window.addEventListener('load', () => {
-    auth.onAuthStateChanged(async (user) => {
-        if (user) {
-            await loadUserData(user.email);
-            showDashboard();
-        } else {
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                const loaded = await loadUserData(savedUser);
-                if (loaded) {
-                    showDashboard();
-                } else {
-                    showLogin();
-                }
-            } else {
-                showLogin();
-            }
-        }
-    });
+// Auth State
+auth.onAuthStateChanged(async user=>{
+  if(user){
+    await loadUserData(user.email);
+    showApp();
+  }else{
+    hide($('app')); show($('landing'));
+    $('navAuthBtn').innerText='Login';
+  }
 });
 
-// Load User Data
-async function loadUserData(identifier) {
-    try {
-        let doc = await db.collection('users').doc(identifier).get();
-        if (!doc.exists) {
-            const query = await db.collection('users').where('mobile', '==', identifier).limit(1).get();
-            if (!query.empty) {
-                doc = query.docs[0];
-                identifier = doc.id;
-            }
-        }
-        if (doc.exists) {
-            currentUserData = { email: doc.id, ...doc.data() };
-            localStorage.setItem('currentUser', doc.id);
-            return true;
-        }
-        return false;
-    } catch (error) {
-        console.error('Error:', error);
-        return false;
-    }
+async function loadUserData(email){
+  let doc = await db.collection('users').doc(email).get();
+  if(!doc.exists){
+    let q = await db.collection('users').where('mobile','==',email).limit(1).get();
+    if(!q.empty){doc=q.docs[0]; email=doc.id;}
+  }
+  if(doc.exists) currentUserData={email:doc.id,...doc.data()};
 }
 
-// UI Functions
-function showSignup() {
-    document.getElementById('loginBox').classList.add('hidden');
-    document.getElementById('signupBox').classList.remove('hidden');
-    document.getElementById('dashboard').classList.add('hidden');
-    clearMessages();
+// Show App based on role
+function showApp(){
+  hide($('landing')); show($('app')); hide($('authModal'));
+  $('userAvatar').src=currentUserData.photo||`https://ui-avatars.com/api/?name=${currentUserData.name}&background=22c55e&color=fff`;
+  $('navAuthBtn').innerText='Dashboard';
+
+  if(currentUserData.email===ADMIN_EMAIL){
+    show($('adminPanel')); hide($('passengerDashboard')); hide($('driverDashboard')); loadAdminData();
+  }else if(currentUserData.role==='driver'){
+    show($('driverDashboard')); hide($('passengerDashboard')); hide($('adminPanel')); loadDriver();
+  }else{
+    show($('passengerDashboard')); hide($('driverDashboard')); hide($('adminPanel')); loadPassenger();
+  }
 }
 
-function showLogin() {
-    document.getElementById('signupBox').classList.add('hidden');
-    document.getElementById('loginBox').classList.remove('hidden');
-    document.getElementById('dashboard').classList.add('hidden');
-    clearMessages();
-}
+// Auth Modal
+$('navAuthBtn').onclick=()=>{ if(auth.currentUser) showApp(); else show($('authModal')); }
+$('closeModal').onclick=()=>hide($('authModal'));
+$('showSignupBtn').onclick=()=>{hide($('loginBox'));show($('signupBox'))};
+$('backToLoginBtn').onclick=()=>{hide($('signupBox'));show($('loginBox'))};
+document.querySelectorAll('input[name="userRole"]').forEach(r=>r.onchange=e=>{$('driverFields').classList.toggle('hidden',e.target.value!=='driver')});
 
-async function showDashboard() {
-    if (!currentUserData) {
-        showLogin();
-        return;
-    }
+// Signup
+$('signupForm').onsubmit=async e=>{
+  e.preventDefault();
+  const name=$('signupName').value.trim(), id=$('signupMobile').value.trim(), pass=$('signupPass').value, cpass=$('signupConfirmPass').value, role=document.querySelector('input[name="userRole"]:checked').value;
+  if(pass!==cpass){$('signupError').innerText='Passwords mismatch';return;}
+  if(!$('termsCheck').checked){$('signupError').innerText='Accept terms';return;}
+  if(await db.collection('users').doc(id).get().then(d=>d.exists)){$('signupError').innerText='Account exists';return;}
 
-    document.getElementById('loginBox').classList.add('hidden');
-    document.getElementById('signupBox').classList.add('hidden');
-    document.getElementById('dashboard').classList.remove('hidden');
+  const userData={name,username:generateUsername(name),password:pass,role,verified:role==='passenger',createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+  if(isEmail(id)) userData.email=id; else userData.mobile=id;
+  if(role==='driver') Object.assign(userData,{vehicleType:$('vehicleType').value,vehicleNumber:$('vehicleNumber').value,rating:5,totalRides:0,earnings:0,cars:[]});
 
-    const userAvatar = document.getElementById('userAvatar');
-    userAvatar.src = currentUserData.photo || `https://ui-avatars.com/api/?name=${currentUserData.name}&background=22c55e&color=fff`;
-
-    const passengerDash = document.getElementById('passengerDashboard');
-    const driverDash = document.getElementById('driverDashboard');
-    const adminPanel = document.getElementById('adminPanel');
-    const bottomNav = document.querySelector('.bottom-nav');
-
-    if (currentUserData.email === ADMIN_EMAIL) {
-        adminPanel.classList.remove('hidden');
-        passengerDash.classList.add('hidden');
-        driverDash.classList.add('hidden');
-        bottomNav.classList.add('hidden');
-        await loadAdminData();
-    } else if (currentUserData.role === 'driver') {
-        driverDash.classList.remove('hidden');
-        passengerDash.classList.add('hidden');
-        adminPanel.classList.add('hidden');
-        bottomNav.classList.remove('hidden');
-        await loadDriverDashboard();
-    } else {
-        passengerDash.classList.remove('hidden');
-        driverDash.classList.add('hidden');
-        adminPanel.classList.add('hidden');
-        bottomNav.classList.remove('hidden');
-        await loadPassengerDashboard();
-    }
-}
-
-// Toggle Password
-function togglePassword(inputId) {
-    let passInput = document.getElementById(inputId);
-    passInput.type = passInput.type === 'password' ? 'text' : 'password';
-}
-
-// Role Selection Toggle
-document.addEventListener('change', (e) => {
-    if (e.target.name === 'userRole') {
-        const driverFields = document.getElementById('driverFields');
-        if (e.target.value === 'driver') {
-            driverFields.classList.remove('hidden');
-        } else {
-            driverFields.classList.add('hidden');
-        }
-    }
-});
-
-// Signup - FIX: Email/Mobile Both + Auto Username
-document.getElementById('signupForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    let name = document.getElementById('signupName').value.trim();
-    let identifier = document.getElementById('signupMobile').value.trim();
-    let pass = document.getElementById('signupPass').value;
-    let confirmPass = document.getElementById('signupConfirmPass').value;
-    let termsChecked = document.getElementById('termsCheck').checked;
-    let role = document.querySelector('input[name="userRole"]:checked').value;
-    let vehicleType = document.getElementById('vehicleType')?.value;
-    let vehicleNumber = document.getElementById('vehicleNumber')?.value;
-
-    clearMessages();
-
-    if (!name || !identifier || !pass || !confirmPass) {
-        document.getElementById('signupError').innerText = 'Please fill all fields';
-        return;
-    }
-    if (pass !== confirmPass) {
-        document.getElementById('signupError').innerText = 'Passwords do not match';
-        return;
-    }
-    if (!termsChecked) {
-        document.getElementById('signupError').innerText = 'Please accept terms';
-        return;
-    }
-    if (role === 'driver' && (!vehicleType || !vehicleNumber)) {
-        document.getElementById('signupError').innerText = 'Please fill vehicle details';
-        return;
-    }
-
-    try {
-        const userDoc = await db.collection('users').doc(identifier).get();
-        if (userDoc.exists) {
-            document.getElementById('signupError').innerText = 'Account already exists';
-            return;
-        }
-
-        let username = generateUsername(name);
-        let isUnique = false;
-        let attempts = 0;
-        while (!isUnique && attempts < 10) {
-            const check = await db.collection('users').where('username', '==', username).get();
-            if (check.empty) {
-                isUnique = true;
-            } else {
-                username = generateUsername(name);
-                attempts++;
-            }
-        }
-
-        const userData = {
-            name: name,
-            username: username,
-            password: pass,
-            role: role,
-            loginType: 'Custom',
-            verified: role === 'passenger' ? true : false,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
-
-        if (isEmail(identifier)) {
-            userData.email = identifier;
-        } else {
-            userData.mobile = identifier;
-        }
-
-        if (role === 'driver') {
-            userData.vehicleType = vehicleType;
-            userData.vehicleNumber = vehicleNumber;
-            userData.rating = 5.0;
-            userData.totalRides = 0;
-            userData.earnings = 0;
-            userData.cars = []; // Driver এর গাড়ি লিস্ট
-        }
-
-        await db.collection('users').doc(identifier).set(userData);
-        document.getElementById('signupSuccess').innerText = `Account created! Username: @${username}`;
-        setTimeout(showLogin, 2000);
-    } catch (error) {
-        document.getElementById('signupError').innerText = 'Error: ' + error.message;
-    }
-});
+  await db.collection('users').doc(id).set(userData);
+  $('signupSuccess').innerText='Account created! Login now';
+  setTimeout(()=>{$('backToLoginBtn').click()},1500);
+};
 
 // Login
-document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    let identifier = document.getElementById('loginMobile').value.trim();
-    let pass = document.getElementById('loginPass').value;
+$('loginForm').onsubmit=async e=>{
+  e.preventDefault();
+  const id=$('loginMobile').value.trim(),pass=$('loginPass').value;
+  await loadUserData(id);
+  if(!currentUserData){$('loginError').innerText='Account not found';return;}
+  if(currentUserData.password!==pass){$('loginError').innerText='Wrong password';return;}
+  auth.signInAnonymously(); // session only
+};
 
-    clearMessages();
-
-    if (!identifier || !pass) {
-        document.getElementById('loginError').innerText = 'Enter email/mobile & password';
-        return;
-    }
-
-    try {
-        const loaded = await loadUserData(identifier);
-        if (!loaded) {
-            document.getElementById('loginError').innerText = 'Account not found';
-            return;
-        }
-        if (currentUserData.loginType === 'Google') {
-            document.getElementById('loginError').innerText = 'Use Google Login';
-            return;
-        }
-        if (currentUserData.password !== pass) {
-            document.getElementById('loginError').innerText = 'Wrong password';
-            return;
-        }
-        showDashboard();
-    } catch (error) {
-        document.getElementById('loginError').innerText = 'Error: ' + error.message;
-    }
+// Google
+$('googleLoginBtn').onclick=()=>auth.signInWithPopup(provider).then(async r=>{
+  const u=r.user; if(!(await db.collection('users').doc(u.email).get()).exists){
+    await db.collection('users').doc(u.email).set({name:u.displayName,username:generateUsername(u.displayName),email:u.email,photo:u.photoURL,role:'passenger',verified:true,loginType:'Google',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  }
 });
-
-// Google Login
-document.getElementById('googleLoginBtn')?.addEventListener('click', handleGoogleLogin);
-document.getElementById('googleSignupBtn')?.addEventListener('click', handleGoogleLogin);
-
-function handleGoogleLogin() {
-    auth.signInWithPopup(provider)
-        .then(async (result) => {
-            const user = result.user;
-            const userDoc = await db.collection('users').doc(user.email).get();
-            if (!userDoc.exists) {
-                const role = confirm('Are you a Driver? OK = Driver, Cancel = Passenger') ? 'driver' : 'passenger';
-                const username = generateUsername(user.displayName);
-                await db.collection('users').doc(user.email).set({
-                    name: user.displayName,
-                    username: username,
-                    photo: user.photoURL,
-                    email: user.email,
-                    role: role,
-                    loginType: 'Google',
-                    verified: role === 'passenger' ? true : false,
-                    cars: [],
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            }
-            await loadUserData(user.email);
-        })
-        .catch((error) => {
-            document.getElementById('loginError').innerText = 'Google login failed';
-        });
-}
 
 // Logout
-document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    auth.signOut().then(() => {
-        localStorage.clear();
-        currentUserData = null;
-        showLogin();
-    });
-});
+$('logoutBtn').onclick=()=>{auth.signOut();currentUserData=null;localStorage.clear();location.reload()};
 
-// Driver Verification Submit - FIX: Admin এ জমা হবে
-document.getElementById('submitVerification')?.addEventListener('click', async () => {
-    const licenseFile = document.getElementById('licensePhoto').files[0];
-    const papersFile = document.getElementById('vehiclePapers').files[0];
-    const vehiclePhotoFile = document.getElementById('vehiclePhoto').files[0];
-
-    if (!licenseFile || !papersFile || !vehiclePhotoFile) {
-        alert('Please upload all documents');
-        return;
-    }
-
-    try {
-        // Upload to Storage
-        const licenseRef = storage.ref(`verifications/${currentUserData.email}/license.jpg`);
-        const papersRef = storage.ref(`verifications/${currentUserData.email}/papers.jpg`);
-        const vehicleRef = storage.ref(`verifications/${currentUserData.email}/vehicle.jpg`);
-
-        await licenseRef.put(licenseFile);
-        await papersRef.put(papersFile);
-        await vehicleRef.put(vehiclePhotoFile);
-
-        const licenseUrl = await licenseRef.getDownloadURL();
-        const papersUrl = await papersRef.getDownloadURL();
-        const vehicleUrl = await vehicleRef.getDownloadURL();
-
-        // Save to Firestore
-        await db.collection('verifications').doc(currentUserData.email).set({
-            driverName: currentUserData.name,
-            driverEmail: currentUserData.email,
-            driverMobile: currentUserData.mobile || currentUserData.email,
-            licenseUrl: licenseUrl,
-            vehiclePaperUrl: papersUrl,
-            vehiclePhotoUrl: vehicleUrl,
-            status: 'pending',
-            submittedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        alert('Documents submitted! Wait for admin approval.');
-        document.getElementById('driverUploadSection').classList.add('hidden');
-    } catch (error) {
-        alert('Error: ' + error.message);
-    }
-});
-
-// Driver Add Car - Garibook এর মতো
-document.getElementById('addCarBtn')?.addEventListener('click', async () => {
-    const carName = prompt('Car Name/Model:');
-    if (!carName) return;
-    const carNumber = prompt('Car Number:');
-    if (!carNumber) return;
-    const carPhoto = prompt('Car Photo URL (optional):');
-
-    const newCar = {
-        name: carName,
-        number: carNumber,
-        photo: carPhoto || '',
-        addedAt: new Date().toISOString()
-    };
-
-    const cars = currentUserData.cars || [];
-    cars.push(newCar);
-
-    await db.collection('users').doc(currentUserData.email).update({ cars: cars });
-    currentUserData.cars = cars;
-    alert('Car added successfully!');
-    loadDriverCars();
-});
-
-async function loadDriverCars() {
-    const container = document.getElementById('driverCarsList');
-    if (!container) return;
-    
-    const cars = currentUserData.cars || [];
-    if (cars.length === 0) {
-        container.innerHTML = '<p style="text-align:center;color:#999;">No cars added</p>';
-        return;
-    }
-
-    let html = '';
-    cars.forEach((car, index) => {
-        html += `
-            <div class="car-card">
-                ${car.photo ? `<img src="${car.photo}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;">` : ''}
-                <h5>${car.name}</h5>
-                <p>${car.number}</p>
-            </div>
-        `;
-    });
-    container.innerHTML = html;
+// Passenger
+async function loadPassenger(){
+  const cars=[{name:'Sedan',price:40},{name:'Hiace',price:70},{name:'Bike',price:15}];
+  $('carList').innerHTML=cars.map(c=>`<div class="car-card" data-name="${c.name}" data-price="${c.price}"><div>🚗</div><div><h5>${c.name}</h5><p>From ৳${c.price}/km</p></div></div>`).join('');
+  document.querySelectorAll('.car-card').forEach(card=>card.onclick=()=>{
+    document.querySelectorAll('.car-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected'); selectedCar=card.dataset;
+    const dist=10; $('fareBox').innerHTML=`<p>Car: ${selectedCar.name}</p><p>Est. Fare: ৳${selectedCar.price*dist}</p><p class="note">*For ~10km</p>`; show($('fareBox'));
+  });
+  $('confirmBooking').onclick=async()=>{
+    if(!selectedCar){alert('Select car');return;}
+    await db.collection('bookings').add({user:currentUserData.email,pickup:$('pickup').value,drop:$('drop').value,date:$('tripDate').value,car:selectedCar.name,status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    alert('Booking placed!'); loadMyBookings();
+  };
+  loadMyBookings();
+}
+async function loadMyBookings(){
+  const snap=await db.collection('bookings').where('user','==',currentUserData.email).get();
+  $('myBookings').innerHTML=snap.empty?'No bookings':snap.docs.map(d=>`<div class="booking-card"><b>${d.data().car}</b> - ${d.data().status}<br>${d.data().pickup} → ${d.data().drop}</div>`).join('');
 }
 
-// Admin Functions
-async function loadAdminData() {
-    const usersSnapshot = await db.collection('users').get();
-    let listHTML = '';
-    let count = 0;
-
-    usersSnapshot.forEach(doc => {
-        count++;
-        const user = doc.data();
-        let icon = user.loginType === 'Google' ? '🔵' : '📱';
-        let badge = user.role === 'driver' ? '🚗' : '🧑';
-        let verifyBadge = user.verified ? '✅' : '⚠️';
-        listHTML += `<div class="user-item" data-email="${doc.id}" style="padding:12px; border-bottom:1px solid #ddd; cursor:pointer;">
-            <b>${count}.</b> ${badge} ${user.name} ${verifyBadge}<br>
-            <span style="color:#666; font-size:12px;">${icon} ${doc.id} | @${user.username}</span>
-        </div>`;
-    });
-
-    document.getElementById('usersList').innerHTML = listHTML || 'No users yet';
-    document.getElementById('totalUsers').innerText = count;
-
-    document.querySelectorAll('.user-item').forEach(item => {
-        item.addEventListener('click', () => viewEditUser(item.dataset.email));
-    });
-
-    await loadVerificationRequests();
+// Driver
+async function loadDriver(){
+  $('todayEarning').innerText='৳'+(currentUserData.earnings||0);
+  $('totalRides').innerText=currentUserData.totalRides||0;
+  $('driverRating').innerText='⭐'+(currentUserData.rating||5);
+  $('driverWarning').classList.toggle('hidden',currentUserData.verified);
+  $('driverUploadSection').classList.toggle('hidden',currentUserData.verified);
+  loadDriverCars();
+  db.collection('bookings').where('status','==','pending').onSnapshot(snap=>{
+    $('rideRequests').innerHTML=snap.empty?'No requests':snap.docs.map(d=>`<div class="booking-card"><b>${d.data().car}</b><br>${d.data().pickup} → ${d.data().drop}<button onclick="acceptRide('${d.id}')">Accept</button></div>`).join('');
+  });
 }
-
-async function viewEditUser(email) {
-    const doc = await db.collection('users').doc(email).get();
-    const user = doc.data();
-    const info = `Name: ${user.name}\nUsername: @${user.username}\nEmail: ${email}\nRole: ${user.role}\nVerified: ${user.verified}\nPassword: ${user.password}\n\nOK to Edit?`;
-    if (!confirm(info)) return;
-
-    const newName = prompt('New name:', user.name);
-    if (newName === null) return;
-    const newPass = prompt('New password:', user.password);
-    if (newPass === null) return;
-    const newVerified = confirm('Mark as Verified?');
-
-    await db.collection('users').doc(email).update({
-        name: newName,
-        password: newPass,
-        verified: newVerified
-    });
-    alert('Updated!');
-    await loadAdminData();
-}
-
-async function loadVerificationRequests() {
-    const container = document.getElementById('verificationRequests');
-    const snapshot = await db.collection('verifications').where('status', '==', 'pending').get();
-
-    if (snapshot.empty) {
-        container.innerHTML = '<p style="text-align:center;color:#999;">No requests</p>';
-        return;
-    }
-
-    let html = '';
-    snapshot.forEach(doc => {
-        const v = doc.data();
-        html += `
-            <div class="booking-card">
-                <h5>${v.driverName}</h5>
-                <p style="font-size:12px;color:#666;">${v.driverEmail}</p>
-                <div style="margin:10px 0;">
-                    <a href="${v.licenseUrl}" target="_blank">License</a> |
-                    <a href="${v.vehiclePaperUrl}" target="_blank">Papers</a> |
-                    <a href="${v.vehiclePhotoUrl}" target="_blank">Photo</a>
-                </div>
-                <div class="booking-actions">
-                    <button class="action-btn primary" onclick="approveVerification('${doc.id}')">Approve</button>
-                    <button class="action-btn" onclick="rejectVerification('${doc.id}')">Reject</button>
-                </div>
-            </div>
-        `;
-    });
-    container.innerHTML = html;
-}
-
-window.approveVerification = async (email) => {
-    await db.collection('verifications').doc(email).update({ status: 'approved' });
-    await db.collection('users').doc(email).update({ verified: true });
-    alert('Approved!');
-    await loadVerificationRequests();
+window.acceptRide=async id=>{await db.collection('bookings').doc(id).update({status:'accepted',driver:currentUserData.email});};
+$('submitVerification').onclick=async()=>{
+  const files=[$('licensePhoto').files[0],$('vehiclePapers').files[0],$('vehiclePhoto').files[0]];
+  if(files.some(f=>!f)){alert('Upload all');return;}
+  const urls=await Promise.all(files.map((f,i)=>storage.ref(`verifications/${currentUserData.email}/${i}.jpg`).put(f).then(()=>storage.ref(`verifications/${currentUserData.email}/${i}.jpg`).getDownloadURL())));
+  await db.collection('verifications').doc(currentUserData.email).set({driverName:currentUserData.name,urls,status:'pending',submittedAt:firebase.firestore.FieldValue.serverTimestamp()});
+  alert('Submitted');hide($('driverUploadSection'));
 };
-
-window.rejectVerification = async (email) => {
-    await db.collection('verifications').doc(email).update({ status: 'rejected' });
-    alert('Rejected');
-    await loadVerificationRequests();
+$('addCarBtn').onclick=async()=>{
+  const name=prompt('Car name?'),num=prompt('Number?'); if(!name||!num)return;
+  const cars=[...(currentUserData.cars||[]),{name,number:num}];
+  await db.collection('users').doc(currentUserData.email).update({cars}); currentUserData.cars=cars; loadDriverCars();
 };
-
-// Driver Dashboard
-async function loadDriverDashboard() {
-    document.getElementById('navTab2').innerText = 'Requests';
-    document.getElementById('navTabCenter').innerText = 'Rides';
-
-    if (!currentUserData.verified) {
-        document.getElementById('driverWarning').classList.remove('hidden');
-        document.getElementById('driverUploadSection').classList.remove('hidden');
-    } else {
-        document.getElementById('driverWarning').classList.add('hidden');
-        document.getElementById('driverUploadSection').classList.add('hidden');
-    }
-
-    document.getElementById('todayEarning').innerText = `৳ ${currentUserData.earnings || 0}`;
-    document.getElementById('totalRides').innerText = currentUserData.totalRides || 0;
-    document.getElementById('driverRating').innerText = `⭐ ${currentUserData.rating || 5.0}`;
-    await loadDriverCars();
+function loadDriverCars(){
+  $('driverCarsList').innerHTML=(currentUserData.cars||[]).map(c=>`<div class="fleet-card"><h4>${c.name}</h4><p>${c.number}</p></div>`).join('')||'<p>No cars</p>';
 }
 
-// Passenger Dashboard
-async function loadPassengerDashboard() {
-    document.getElementById('navTab2').innerText = 'Bookings';
-    document.getElementById('navTabCenter').innerText = 'Book';
+// Admin
+async function loadAdminData(){
+  const users=await db.collection('users').get();
+  $('totalUsers').innerText=users.size;
+  $('usersList').innerHTML=users.docs.map((d,i)=>`<div class="user-item" onclick="editUser('${d.id}')"><b>${i+1}. ${d.data().name}</b><br>${d.id} - ${d.data().role} ${d.data().verified?'✅':'⚠️'}</div>`).join('');
+  loadVerifications();
+  document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+    document.querySelectorAll('.admin-section').forEach(s=>hide(s));
+    show($('admin'+b.dataset.tab.charAt(0).toUpperCase()+b.dataset.tab.slice(1)));
+  });
 }
-
-// Admin Tabs
-document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('tab-btn')) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.admin-content').forEach(c => c.classList.add('hidden'));
-        e.target.classList.add('active');
-        document.getElementById('admin' + e.target.dataset.tab.charAt(0).toUpperCase() + e.target.dataset.tab.slice(1)).classList.remove('hidden');
-    }
-});
-
-function clearMessages() {
-    document.querySelectorAll('.error,.success').forEach(e => e.innerText = '');
+window.editUser=async email=>{
+  const d=await db.collection('users').doc(email).get(); const u=d.data();
+  const name=prompt('Name',u.name); if(name===null)return;
+  const verified=confirm('Verified?');
+  await db.collection('users').doc(email).update({name,verified}); loadAdminData();
+};
+async function loadVerifications(){
+  const snap=await db.collection('verifications').where('status','==','pending').get();
+  $('verificationRequests').innerHTML=snap.empty?'No requests':snap.docs.map(d=>`<div class="booking-card"><b>${d.data().driverName}</b><br>${d.data().urls.map(u=>`<a href="${u}" target="_blank">Doc</a>`).join(' | ')}<br><button onclick="approve('${d.id}')">Approve</button><button onclick="reject('${d.id}')">Reject</button></div>`).join('');
 }
+window.approve=async id=>{await db.collection('verifications').doc(id).update({status:'approved'});await db.collection('users').doc(id).update({verified:true});loadVerifications();};
+window.reject=async id=>{await db.collection('verifications').doc(id).update({status:'rejected'});loadVerifications();};
 
-// Other Event Listeners
-document.getElementById('showSignupBtn')?.addEventListener('click', showSignup);
-document.getElementById('backToLoginBtn')?.addEventListener('click', showLogin);
-document.getElementById('backToLoginBtn2')?.addEventListener('click', showLogin);
-document.getElementById('toggleLoginPass')?.addEventListener('click', () => togglePassword('loginPass'));
-document.getElementById('toggleSignupPass1')?.addEventListener('click', () => togglePassword('signupPass'));
-document.getElementById('toggleSignupPass2')?.addEventListener('click', () => togglePassword('signupConfirmPass'));
+// UX
+$('quickBookingForm').onsubmit=e=>{e.preventDefault();$('navAuthBtn').click();};
+$('toggleLoginPass').onclick=()=>$('loginPass').type=$('loginPass').type==='password'?'text':'password';
+$('toggleSignupPass1').onclick=()=>$('signupPass').type=$('signupPass').type==='password'?'text':'password';
