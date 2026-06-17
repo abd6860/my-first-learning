@@ -1,184 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HB Ride</title>
+<title>HB Ride - Passenger</title>
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- Navbar -->
 <nav class="navbar">
   <div class="nav-container">
-    <h1 class="logo">HB <span>Ride</span></h1>
-    <div class="nav-links" id="navLinks">
-      <a href="#home">Home</a>
-      <a href="#fleet">Fleet</a>
-      <a href="#how">How it works</a>
-      <button id="navAuthBtn" class="nav-btn">Login</button>
+    <div class="logo">🚗 HB Ride</div>
+    <div class="nav-right">
+      <span id="userPhone" class="hidden"></span>
+      <button class="nav-btn" id="loginBtn">login</button>
+      <button class="nav-btn hidden" id="logoutBtn">Logout</button>
+      <button class="hamburger" id="menuBtn">☰</button>
     </div>
   </div>
 </nav>
 
-<!-- LANDING -->
-<section id="landing">
-  <section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <h2>Book Your Ride <br>in Minutes</h2>
-      <p>Safe, comfortable & reliable travel across Bangladesh</p>
-      <div class="booking-card">
-        <form id="quickBookingForm">
-          <div class="form-row">
-            <div class="form-field"><label>Pickup</label><input type="text" id="qPickup" required></div>
-            <div class="form-field"><label>Drop</label><input type="text" id="qDrop" required></div>
-            <div class="form-field"><label>Date & Time</label><input type="datetime-local" id="qDateTime" required></div>
-            <button type="submit" class="search-btn">Search</button>
-          </div>
-        </form>
+<!-- Landing / Booking Section -->
+<div id="landingPage">
+  <section class="hero">
+    <h1>Freedom in Every Journey</h1>
+    <p>Premium car rental with professional drivers</p>
+    
+    <div class="booking-card" id="bookingCard">
+      <div class="tabs">
+        <button class="tab active">Car Rental</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Choose a Car</label>
+          <select id="carSelect">
+            <option value="">Select Car Type</option>
+            <option value="Sedan">Sedan - ৳25/km</option>
+            <option value="SUV">SUV - ৳35/km</option>
+            <option value="Microbus">Microbus - ৳45/km</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Pickup Location</label>
+          <input type="text" id="pickup" placeholder="Enter pickup">
+        </div>
+        <div class="form-group">
+          <label>Drop Location</label>
+          <input type="text" id="drop" placeholder="Enter drop">
+        </div>
+        <div class="form-group">
+          <label>Date & Time</label>
+          <input type="datetime-local" id="datetime">
+        </div>
+        <button class="search-btn" id="searchBtn">Search & Book</button>
       </div>
     </div>
   </section>
 
-  <section class="fleet" id="fleet">
-    <div class="container">
-      <h3 class="section-title">Our Fleet</h3>
-      <div class="fleet-grid">
-        <div class="fleet-card" data-car="Sedan" data-price="40"><div class="fleet-img">🚗</div><h4>Sedan AC</h4><p>4 Seats • AC</p><div class="price">৳40/km</div></div>
-        <div class="fleet-card" data-car="Hiace" data-price="70"><div class="fleet-img">🚐</div><h4>Hiace Micro</h4><p>10 Seats • AC</p><div class="price">৳70/km</div></div>
-        <div class="fleet-card" data-car="Bike" data-price="15"><div class="fleet-img">🏍️</div><h4>Bike</h4><p>1 Seat • Economy</p><div class="price">৳15/km</div></div>
+  <!-- Passenger Dashboard - hidden until login -->
+  <section class="section hidden" id="dashboard">
+    <h2 class="section-title">My Dashboard</h2>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <h3>📋 My Bookings</h3>
+        <div id="bookingList">Loading...</div>
+      </div>
+      <div class="dash-card">
+        <h3>👤 Profile</h3>
+        <p><b>Phone:</b> <span id="profilePhone">-</span></p>
+        <p><b>Status:</b> Verified Passenger</p>
       </div>
     </div>
   </section>
+</div>
 
-  <section class="how-it-works" id="how">
-    <div class="container">
-      <h3 class="section-title">How it works</h3>
-      <div class="steps-grid">
-        <div class="step-card"><div class="step-icon">1</div><h4>Book Online</h4><p>Enter details & get fare</p></div>
-        <div class="step-card"><div class="step-icon">2</div><h4>Confirm</h4><p>Driver calls & confirms</p></div>
-        <div class="step-card"><div class="step-icon">3</div><h4>Ride</h4><p>Safe journey</p></div>
-      </div>
-    </div>
-  </section>
-  <footer class="footer"><div class="container"><p class="copyright">© 2026 HB Ride</p></div></footer>
-</section>
-
-<!-- AUTH MODAL -->
-<div class="modal hidden" id="authModal">
+<!-- Login Modal with OTP -->
+<div class="modal hidden" id="loginModal">
   <div class="modal-content">
-    <span class="close-btn" id="closeModal">×</span>
-    <div id="loginBox">
-      <h3>Login</h3>
-      <form id="loginForm">
-        <input type="text" id="loginMobile" placeholder="Email or Mobile" required>
-        <div class="password-input"><input type="password" id="loginPass" placeholder="Password" required><span class="toggle-eye" id="toggleLoginPass">👁️</span></div>
-        <button type="submit">Login</button>
-        <p class="error" id="loginError"></p>
-      </form>
-      <button id="googleLoginBtn" class="social-btn">Login with Google</button>
-      <p class="signup-link">No account? <a id="showSignupBtn">Sign up</a></p>
+    <div class="modal-header">
+      login
+      <button class="close-btn" id="closeModal">×</button>
     </div>
-    <div id="signupBox" class="hidden">
-      <h3>Sign Up</h3>
-      <form id="signupForm">
-        <input type="text" id="signupName" placeholder="Full Name" required>
-        <input type="text" id="signupMobile" placeholder="Email or Mobile" required>
-        <div class="role-selection">
-          <label class="role-card"><input type="radio" name="userRole" value="passenger" checked><div class="role-content"><h4>Passenger</h4></div></label>
-          <label class="role-card"><input type="radio" name="userRole" value="driver"><div class="role-content"><h4>Driver</h4></div></label>
-        </div>
-        <div id="driverFields" class="hidden">
-          <select id="vehicleType"><option value="">Vehicle Type</option><option>Sedan</option><option>Hiace</option><option>Bike</option></select>
-          <input type="text" id="vehicleNumber" placeholder="Vehicle Number">
-        </div>
-        <div class="password-input"><input type="password" id="signupPass" placeholder="Password" required><span class="toggle-eye" id="toggleSignupPass1">👁️</span></div>
-        <input type="password" id="signupConfirmPass" placeholder="Confirm Password" required>
-        <label class="checkbox-group"><input type="checkbox" id="termsCheck"> I accept terms</label>
-        <button type="submit">Create Account</button>
-        <p class="error" id="signupError"></p><p class="success" id="signupSuccess"></p>
-      </form>
-      <p class="signup-link">Have account? <a id="backToLoginBtn">Login</a></p>
+    <div class="modal-body" id="phoneStep">
+      <label>Enter Your Phone Number</label>
+      <div class="phone-input">
+        <select><option>🇧🇩 +880</option></select>
+        <input type="tel" id="phoneInput" placeholder="1XXXXXXXXX" maxlength="10">
+      </div>
+      <small>OTP যাবে এই নাম্বারে</small>
+      <div id="recaptcha-container"></div>
+      <button class="modal-btn" id="sendOtpBtn">Send Code</button>
+    </div>
+    <div class="modal-body hidden" id="otpStep">
+      <label>Enter 6-digit OTP</label>
+      <div class="otp-inputs">
+        <input type="text" maxlength="1"><input type="text" maxlength="1">
+        <input type="text" maxlength="1"><input type="text" maxlength="1">
+        <input type="text" maxlength="1"><input type="text" maxlength="1">
+      </div>
+      <button class="modal-btn" id="verifyBtn">Continue</button>
+      <p id="otpError" class="error"></p>
     </div>
   </div>
 </div>
 
-<!-- DASHBOARD APP -->
-<div id="app" class="hidden">
-  <header class="dash-header">
-    <h3 class="app-title">HB <span>Ride</span></h3>
-    <div class="header-icons">
-      <img id="userAvatar" class="user-avatar" src="">
-      <button id="logoutBtn" class="logout-btn">Logout</button>
-    </div>
-  </header>
-
-  <!-- PASSENGER -->
-  <div id="passengerDashboard" class="hidden">
-    <div class="container">
-      <h4>Book a Ride</h4>
-      <div class="booking-form">
-        <input type="text" id="pickup" placeholder="Pickup location">
-        <input type="text" id="drop" placeholder="Drop location">
-        <input type="datetime-local" id="tripDate">
-        <div class="car-list" id="carList"></div>
-        <div id="fareBox" class="fare-summary hidden"></div>
-        <button id="confirmBooking">Confirm Booking</button>
-      </div>
-      <h4 style="margin-top:40px">My Bookings</h4>
-      <div id="myBookings"></div>
-    </div>
-  </div>
-
-  <!-- DRIVER -->
-  <div id="driverDashboard" class="hidden">
-    <div class="container">
-      <div id="driverWarning" class="warning-banner hidden"><div class="warning-scroll"><span>⚠️ Complete verification to accept rides</span></div></div>
-      <div class="stats-grid">
-        <div class="stat-card"><h5>Today's Earning</h5><b id="todayEarning">৳0</b></div>
-        <div class="stat-card"><h5>Total Rides</h5><b id="totalRides">0</b></div>
-        <div class="stat-card"><h5>Rating</h5><b id="driverRating">⭐5.0</b></div>
-      </div>
-      <div id="driverUploadSection">
-        <h4>Upload Documents</h4>
-        <input type="file" id="licensePhoto"><input type="file" id="vehiclePapers"><input type="file" id="vehiclePhoto">
-        <button id="submitVerification">Submit for Approval</button>
-      </div>
-      <h4>My Cars <button id="addCarBtn">+ Add Car</button></h4>
-      <div id="driverCarsList" class="fleet-grid"></div>
-      <h4 style="margin-top:40px">Ride Requests</h4>
-      <div id="rideRequests"></div>
-    </div>
-  </div>
-
-  <!-- ADMIN -->
-  <div id="adminPanel" class="hidden">
-    <div class="admin-layout">
-      <aside class="admin-sidebar">
-        <h3>Admin</h3>
-        <button class="tab-btn active" data-tab="users">Users</button>
-        <button class="tab-btn" data-tab="verifications">Verifications</button>
-      </aside>
-      <main class="admin-content">
-        <div id="adminUsers" class="admin-section">
-          <div class="admin-header"><h2>All Users</h2><span>Total: <b id="totalUsers">0</b></span></div>
-          <div id="usersList" class="users-grid"></div>
-        </div>
-        <div id="adminVerifications" class="admin-section hidden">
-          <h2>Pending Driver Verifications</h2>
-          <div id="verificationRequests" class="verif-grid"></div>
-        </div>
-      </main>
-    </div>
-  </div>
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="showLanding()">Home</a>
+  <a href="#" onclick="showDashboard()">My Bookings</a>
+  <a href="#">Support</a>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
