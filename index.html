@@ -1,497 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HB Ride</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HB Ride</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="login-page">
-    <div class="bg-animation"></div>
-    <!-- Login Box -->
-    <div class="container" id="loginBox">
-        <div class="logo-section">
-            <h1>HB <span>Ride</span></h1>
-            <h3>Welcome</h3>
-            <p>Start Your Journey</p>
-        </div>
-        <div class="illustration">
-            <svg width="200" height="120" viewBox="0 0 200 120">
-                <circle cx="100" cy="30" r="15" fill="#22c55e" opacity="0.3">
-                    <animate attributeName="r" values="15;20;15" dur="2s" repeatCount="indefinite" />
-                </circle>
-                <path d="M100 15 L100 45" stroke="#22c55e" stroke-width="3" />
-                <path d="M70 80 L130 80 L140 95 L60 95 Z" fill="#22c55e" />
-                <circle cx="80" cy="95" r="8" fill="#333" />
-                <circle cx="120" cy="95" r="8" fill="#333" />
-            </svg>
-        </div>
-        <form id="loginForm" method="post">
-            <div class="form-group">
-                <label>Mobile Number</label>
-                <div class="phone-input">
-                    <select>
-                        <option>+880</option>
-                    </select>
-                    <input type="tel" id="loginMobile" name="username" autocomplete="username" placeholder="Type Your Mobile Number" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <div class="password-input">
-                    <input type="password" id="loginPass" name="password" autocomplete="current-password" placeholder="Type Your Password" required>
-                    <span class="toggle-eye" id="toggleLoginPass">👁️</span>
-                </div>
-            </div>
-            <p class="error" id="loginError"></p>
-            <div class="forgot-link">
-                <a id="forgotBtn">Forgot your password?</a>
-            </div>
-            <button type="submit">Login</button>
-        </form>
-        <div class="divider">
-            <span>Or Login With</span>
-        </div>
-        <div class="social-login">
-            <button class="social-btn" id="googleLoginBtn">
-                <svg width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg> Continue with Google
-            </button>
-        </div>
-        <div class="signup-link">
-            Don't have an account? <a id="showSignupBtn">Sign Up</a>
-        </div>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-container">
+    <h1 class="logo">HB <span>Ride</span></h1>
+    <div class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#fleet">Fleet</a>
+      <a href="#how">How it works</a>
+      <button id="navAuthBtn" class="nav-btn">Login</button>
     </div>
-    
-    <!-- Signup Box -->
-    <div class="container hidden" id="signupBox">
-        <div class="back-btn" id="backToLoginBtn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-        </div>
-        <div class="logo-section">
-            <h1>HB <span>Ride</span></h1>
-            <h3>Create New Account</h3>
-            <p>Select your account type</p>
-        </div>
-        
-        <!-- Role Selection -->
+  </div>
+</nav>
+
+<!-- LANDING -->
+<section id="landing">
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h2>Book Your Ride <br>in Minutes</h2>
+      <p>Safe, comfortable & reliable travel across Bangladesh</p>
+      <div class="booking-card">
+        <form id="quickBookingForm">
+          <div class="form-row">
+            <div class="form-field"><label>Pickup</label><input type="text" id="qPickup" required></div>
+            <div class="form-field"><label>Drop</label><input type="text" id="qDrop" required></div>
+            <div class="form-field"><label>Date & Time</label><input type="datetime-local" id="qDateTime" required></div>
+            <button type="submit" class="search-btn">Search</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="fleet" id="fleet">
+    <div class="container">
+      <h3 class="section-title">Our Fleet</h3>
+      <div class="fleet-grid">
+        <div class="fleet-card" data-car="Sedan" data-price="40"><div class="fleet-img">🚗</div><h4>Sedan AC</h4><p>4 Seats • AC</p><div class="price">৳40/km</div></div>
+        <div class="fleet-card" data-car="Hiace" data-price="70"><div class="fleet-img">🚐</div><h4>Hiace Micro</h4><p>10 Seats • AC</p><div class="price">৳70/km</div></div>
+        <div class="fleet-card" data-car="Bike" data-price="15"><div class="fleet-img">🏍️</div><h4>Bike</h4><p>1 Seat • Economy</p><div class="price">৳15/km</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works" id="how">
+    <div class="container">
+      <h3 class="section-title">How it works</h3>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-icon">1</div><h4>Book Online</h4><p>Enter details & get fare</p></div>
+        <div class="step-card"><div class="step-icon">2</div><h4>Confirm</h4><p>Driver calls & confirms</p></div>
+        <div class="step-card"><div class="step-icon">3</div><h4>Ride</h4><p>Safe journey</p></div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer"><div class="container"><p class="copyright">© 2026 HB Ride</p></div></footer>
+</section>
+
+<!-- AUTH MODAL -->
+<div class="modal hidden" id="authModal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeModal">×</span>
+    <div id="loginBox">
+      <h3>Login</h3>
+      <form id="loginForm">
+        <input type="text" id="loginMobile" placeholder="Email or Mobile" required>
+        <div class="password-input"><input type="password" id="loginPass" placeholder="Password" required><span class="toggle-eye" id="toggleLoginPass">👁️</span></div>
+        <button type="submit">Login</button>
+        <p class="error" id="loginError"></p>
+      </form>
+      <button id="googleLoginBtn" class="social-btn">Login with Google</button>
+      <p class="signup-link">No account? <a id="showSignupBtn">Sign up</a></p>
+    </div>
+    <div id="signupBox" class="hidden">
+      <h3>Sign Up</h3>
+      <form id="signupForm">
+        <input type="text" id="signupName" placeholder="Full Name" required>
+        <input type="text" id="signupMobile" placeholder="Email or Mobile" required>
         <div class="role-selection">
-            <label class="role-card">
-                <input type="radio" name="userRole" value="passenger" checked>
-                <div class="role-content">
-                    <h4>🧑 Passenger</h4>
-                    <p>Book rides for travel</p>
-                </div>
-            </label>
-            <label class="role-card">
-                <input type="radio" name="userRole" value="driver">
-                <div class="role-content">
-                    <h4>🚗 Driver/Owner</h4>
-                    <p>Provide ride service</p>
-                </div>
-            </label>
+          <label class="role-card"><input type="radio" name="userRole" value="passenger" checked><div class="role-content"><h4>Passenger</h4></div></label>
+          <label class="role-card"><input type="radio" name="userRole" value="driver"><div class="role-content"><h4>Driver</h4></div></label>
         </div>
-
-        <form id="signupForm" method="post">
-            <div class="form-group">
-                <div class="input-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
-                    <input type="text" id="signupName" name="name" autocomplete="name" placeholder="Full Name" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="input-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 0 0 1-8.63-3.07 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                    </svg>
-                    <select>
-                        <option>+880</option>
-                    </select>
-                    <input type="tel" id="signupMobile" name="username" autocomplete="username" placeholder="Mobile Number" required>
-                </div>
-            </div>
-            
-            <!-- Driver Only Fields -->
-            <div id="driverFields" class="hidden">
-                <div class="form-group">
-                    <select id="vehicleType" required>
-                        <option value="">Select Vehicle Type</option>
-                        <option value="Bike">Bike</option>
-                        <option value="Sedan">Sedan Car - AC</option>
-                        <option value="Hiace">Hiace Micro - AC</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="vehicleNumber" placeholder="Vehicle Registration Number">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                    <input type="password" id="signupPass" name="new-password" autocomplete="new-password" placeholder="Password" required>
-                    <span class="toggle-eye" id="toggleSignupPass1">👁️</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="input-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                    <input type="password" id="signupConfirmPass" name="new-password" autocomplete="new-password" placeholder="Confirm Password" required>
-                    <span class="toggle-eye" id="toggleSignupPass2">👁️</span>
-                </div>
-            </div>
-            <p class="error" id="signupError"></p>
-            <p class="success" id="signupSuccess"></p>
-            <div class="checkbox-group">
-                <input type="checkbox" id="termsCheck">
-                <label for="termsCheck">I Agree To The Terms And Privacy Policy</label>
-            </div>
-            <button type="submit">Sign Up</button>
-        </form>
-        <div class="signup-link">
-            Already Have An Account? <a id="backToLoginBtn2">Login</a>
+        <div id="driverFields" class="hidden">
+          <select id="vehicleType"><option value="">Vehicle Type</option><option>Sedan</option><option>Hiace</option><option>Bike</option></select>
+          <input type="text" id="vehicleNumber" placeholder="Vehicle Number">
         </div>
+        <div class="password-input"><input type="password" id="signupPass" placeholder="Password" required><span class="toggle-eye" id="toggleSignupPass1">👁️</span></div>
+        <input type="password" id="signupConfirmPass" placeholder="Confirm Password" required>
+        <label class="checkbox-group"><input type="checkbox" id="termsCheck"> I accept terms</label>
+        <button type="submit">Create Account</button>
+        <p class="error" id="signupError"></p><p class="success" id="signupSuccess"></p>
+      </form>
+      <p class="signup-link">Have account? <a id="backToLoginBtn">Login</a></p>
     </div>
+  </div>
+</div>
 
-    <!-- Main Dashboard -->
-    <div class="container hidden" id="dashboard" style="background:#f9f9f9;">
-        <!-- Header -->
-        <div class="dash-header">
-            <div class="location">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                </svg>
-                <span id="userLocation">Pangsha, Rajbari</span>
-            </div>
-            <h2 class="app-title">HB <span>Ride</span></h2>
-            <div class="header-icons">
-                <div class="notification-icon" id="notifIcon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                    </svg>
-                    <span class="notification-badge" id="notifCount">0</span>
-                </div>
-                <img id="userAvatar" src="" class="user-avatar">
-                <button class="logout-btn" id="logoutBtn">Log Out</button>
-            </div>
-        </div>
-
-        <!-- Driver Verification Warning -->
-        <div id="driverWarning" class="warning-banner hidden">
-            <div class="warning-scroll">
-                <span>⚠️ Please submit your driving license & vehicle papers to activate your account. Your account is currently inactive.</span>
-            </div>
-        </div>
-
-        <!-- Driver Document Upload Section -->
-        <div id="driverUploadSection" class="section hidden">
-            <div class="section-header">
-                <h4>📄 Upload Documents for Verification</h4>
-            </div>
-            <form id="documentUploadForm">
-                <div class="form-group">
-                    <label>Driving License *</label>
-                    <input type="file" id="licenseFile" accept="image/*" required>
-                </div>
-                <div class="form-group">
-                    <label>Vehicle Registration Paper *</label>
-                    <input type="file" id="vehicleFile" accept="image/*" required>
-                </div>
-                <div class="form-group">
-                    <label>Vehicle Photo *</label>
-                    <input type="file" id="vehiclePhoto" accept="image/*" required>
-                </div>
-                <button type="submit" class="primary-btn">Submit for Verification</button>
-            </form>
-            <div id="verificationPending" class="hidden" style="text-align:center;padding:20px;">
-                <h4>✅ Documents Submitted</h4>
-                <p>Your documents are under review. Our team will call you for verification within 24 hours.</p>
-            </div>
-        </div>
-
-        <!-- PASSENGER DASHBOARD -->
-        <div id="passengerDashboard" class="hidden">
-            <!-- Banner -->
-            <div class="banner">
-                <div class="banner-content">
-                    <h3>Book Your Ride Fast</h3>
-                    <p>Safe and comfortable travel<br>Your journey companion</p>
-                    <button class="banner-btn" id="scrollToBooking">Book Now ›</button>
-                </div>
-                <div class="banner-car">
-                    <svg width="120" height="70" viewBox="0 0 120 70">
-                        <path d="M20 45 L100 45 L105 55 L15 55 Z" fill="#22c55e" />
-                        <circle cx="35" cy="55" r="8" fill="#333" />
-                        <circle cx="85" cy="55" r="8" fill="#333" />
-                        <rect x="30" y="30" width="60" height="15" rx="7" fill="#22c55e" />
-                        <rect x="40" y="20" width="40" height="12" rx="6" fill="#16a34a" />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Booking Section -->
-            <div class="section" id="bookingSection">
-                <div class="section-header">
-                    <h4>🚗 Book A Car</h4>
-                </div>
-                
-                <form id="bookingForm" class="booking-form">
-                    <div class="form-group">
-                        <label>Pickup Location</label>
-                        <input type="text" id="pickupLocation" placeholder="Ex: Pangsha Bazar" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Drop Location</label>
-                        <input type="text" id="dropLocation" placeholder="Ex: Dhaka Airport" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Trip Type</label>
-                        <div class="trip-type">
-                            <label><input type="radio" name="tripType" value="oneway" checked> One Way</label>
-                            <label><input type="radio" name="tripType" value="roundtrip"> Round Trip</label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Date & Time</label>
-                        <input type="datetime-local" id="bookingDateTime" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Passengers</label>
-                        <select id="passengerCount">
-                            <option value="1">1 Person</option>
-                            <option value="2">2 Persons</option>
-                            <option value="3">3 Persons</option>
-                            <option value="4" selected>4 Persons</option>
-                            <option value="10">10 Persons</option>
-                        </select>
-                    </div>
-                    
-                    <button type="button" id="checkFareBtn" class="primary-btn">Check Fare</button>
-                </form>
-                
-                <!-- Car Selection -->
-                <div id="carSelection" class="hidden">
-                    <h4>Select Your Car</h4>
-                    <div class="car-list">
-                        <div class="car-card" data-car="Sedan" data-price="40">
-                            <div class="car-img">🚗</div>
-                            <div class="car-info">
-                                <h5>Sedan - AC</h5>
-                                <p>4 Seats | Comfort Ride</p>
-                                <b class="car-fare">৳ 0</b>
-                            </div>
-                            <button class="select-car-btn">Select</button>
-                        </div>
-                        
-                        <div class="car-card" data-car="Hiace" data-price="70">
-                            <div class="car-img">🚐</div>
-                            <div class="car-info">
-                                <h5>Hiace Micro - AC</h5>
-                                <p>10 Seats | Family/Group</p>
-                                <b class="car-fare">৳ 0</b>
-                            </div>
-                            <button class="select-car-btn">Select</button>
-                        </div>
-                        
-                        <div class="car-card" data-car="Bike" data-price="15">
-                            <div class="car-img">🏍️</div>
-                            <div class="car-info">
-                                <h5>Bike</h5>
-                                <p>1 Seat | Quick Travel</p>
-                                <b class="car-fare">৳ 0</b>
-                            </div>
-                            <button class="select-car-btn">Select</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Passenger Details -->
-                <div id="passengerDetails" class="hidden">
-                    <h4>Passenger Information</h4>
-                    <form id="confirmBookingForm">
-                        <div class="form-group">
-                            <input type="text" id="customerName" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="tel" id="customerMobile" placeholder="Mobile Number" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="specialNote" placeholder="Special Note - Ex: 2 luggage"></textarea>
-                        </div>
-                        <div class="fare-summary">
-                            <p>Total Fare: <b id="totalFare">৳ 0</b></p>
-                            <p class="note">* Driver will call 10 minutes before</p>
-                        </div>
-                        <button type="submit" class="primary-btn">Confirm Booking</button>
-                        <button type="button" id="backToCarBtn" class="secondary-btn">Back</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- My Bookings Section -->
-            <div class="section" id="myBookings">
-                <div class="section-header">
-                    <h4>My Bookings</h4>
-                </div>
-                <div id="bookingsList">
-                    <p style="text-align:center;color:#999;">No bookings yet</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- DRIVER DASHBOARD -->
-        <div id="driverDashboard" class="hidden">
-            <!-- Driver Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h5>Today's Earning</h5>
-                    <b id="todayEarning">৳ 0</b>
-                </div>
-                <div class="stat-card">
-                    <h5>Total Rides</h5>
-                    <b id="totalRides">0</b>
-                </div>
-                <div class="stat-card">
-                    <h5>Rating</h5>
-                    <b id="driverRating">⭐ 5.0</b>
-                </div>
-            </div>
-
-            <!-- Pending Booking Requests -->
-            <div class="section" id="pendingRequests">
-                <div class="section-header">
-                    <h4>📋 Pending Booking Requests</h4>
-                    <span class="badge" id="pendingCount">0</span>
-                </div>
-                <div id="pendingBookingsList">
-                    <p style="text-align:center;color:#999;">No pending requests</p>
-                </div>
-            </div>
-
-            <!-- My Accepted Rides -->
-            <div class="section" id="myRides">
-                <div class="section-header">
-                    <h4>🚗 My Accepted Rides</h4>
-                </div>
-                <div id="acceptedRidesList">
-                    <p style="text-align:center;color:#999;">No active rides</p>
-                </div>
-            </div>
-
-            <!-- Earnings History -->
-            <div class="section" id="earningsSection">
-                <div class="section-header">
-                    <h4>💰 Earnings History</h4>
-                </div>
-                <div id="earningsList">
-                    <p style="text-align:center;color:#999;">No earnings yet</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ADMIN PANEL -->
-        <div id="adminPanel" class="hidden section" style="background:#f5f5f5; padding:15px; border-radius:10px;">
-            <h4 style="color:#22c55e;">🔒 Admin Panel</h4>
-            <div class="admin-tabs">
-                <button class="tab-btn active" data-tab="users">Users</button>
-                <button class="tab-btn" data-tab="bookings">Bookings</button>
-                <button class="tab-btn" data-tab="verifications">Verifications</button>
-            </div>
-            
-            <div id="adminUsers" class="admin-content">
-                <p style="font-size:13px;">Total Users: <b id="totalUsers">0</b></p>
-                <div id="usersList" style="text-align:left; max-height:200px; overflow:auto; font-size:14px; background:white; padding:10px; border-radius:8px; margin:10px 0;"></div>
-                <button id="exportUsersBtn" style="background:#333;">📥 Download List</button>
-            </div>
-
-            <div id="adminBookings" class="admin-content hidden">
-                <div id="allBookingsList">
-                    <p style="text-align:center;color:#999;">No bookings found</p>
-                </div>
-            </div>
-
-            <div id="adminVerifications" class="admin-content hidden">
-                <div id="verificationRequests">
-                    <p style="text-align:center;color:#999;">No verification requests</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Notification Panel -->
-        <div id="notificationPanel" class="notification-panel hidden">
-            <div class="notification-header">
-                <h4>Notifications</h4>
-                <button id="closeNotif">✕</button>
-            </div>
-            <div id="notificationList">
-                <p style="text-align:center;color:#999;padding:20px;">No notifications</p>
-            </div>
-        </div>
-        
-        <!-- Bottom Navigation -->
-        <div class="bottom-nav">
-            <div class="nav-item active" id="homeNav">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                </svg>
-                <span>Home</span>
-            </div>
-            <div class="nav-item" id="bookingNav">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7" />
-                    <rect x="14" y="3" width="7" height="7" />
-                    <rect x="14" y="14" width="7" height="7" />
-                    <rect x="3" y="14" width="7" height="7" />
-                </svg>
-                <span id="navTab2">Bookings</span>
-            </div>
-            <div class="nav-item center" id="centerNav">
-                <div class="add-btn">+</div>
-                <span id="navTabCenter">Book</span>
-            </div>
-            <div class="nav-item" id="supportNav">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
-                <span>Support</span>
-            </div>
-            <div class="nav-item" id="profileNav">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                </svg>
-                <span>Profile</span>
-            </div>
-        </div>
+<!-- DASHBOARD APP -->
+<div id="app" class="hidden">
+  <header class="dash-header">
+    <h3 class="app-title">HB <span>Ride</span></h3>
+    <div class="header-icons">
+      <img id="userAvatar" class="user-avatar" src="">
+      <button id="logoutBtn" class="logout-btn">Logout</button>
     </div>
+  </header>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-    <!-- Your JS -->
-    <script src="script.js"></script>
+  <!-- PASSENGER -->
+  <div id="passengerDashboard" class="hidden">
+    <div class="container">
+      <h4>Book a Ride</h4>
+      <div class="booking-form">
+        <input type="text" id="pickup" placeholder="Pickup location">
+        <input type="text" id="drop" placeholder="Drop location">
+        <input type="datetime-local" id="tripDate">
+        <div class="car-list" id="carList"></div>
+        <div id="fareBox" class="fare-summary hidden"></div>
+        <button id="confirmBooking">Confirm Booking</button>
+      </div>
+      <h4 style="margin-top:40px">My Bookings</h4>
+      <div id="myBookings"></div>
+    </div>
+  </div>
+
+  <!-- DRIVER -->
+  <div id="driverDashboard" class="hidden">
+    <div class="container">
+      <div id="driverWarning" class="warning-banner hidden"><div class="warning-scroll"><span>⚠️ Complete verification to accept rides</span></div></div>
+      <div class="stats-grid">
+        <div class="stat-card"><h5>Today's Earning</h5><b id="todayEarning">৳0</b></div>
+        <div class="stat-card"><h5>Total Rides</h5><b id="totalRides">0</b></div>
+        <div class="stat-card"><h5>Rating</h5><b id="driverRating">⭐5.0</b></div>
+      </div>
+      <div id="driverUploadSection">
+        <h4>Upload Documents</h4>
+        <input type="file" id="licensePhoto"><input type="file" id="vehiclePapers"><input type="file" id="vehiclePhoto">
+        <button id="submitVerification">Submit for Approval</button>
+      </div>
+      <h4>My Cars <button id="addCarBtn">+ Add Car</button></h4>
+      <div id="driverCarsList" class="fleet-grid"></div>
+      <h4 style="margin-top:40px">Ride Requests</h4>
+      <div id="rideRequests"></div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="adminPanel" class="hidden">
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <h3>Admin</h3>
+        <button class="tab-btn active" data-tab="users">Users</button>
+        <button class="tab-btn" data-tab="verifications">Verifications</button>
+      </aside>
+      <main class="admin-content">
+        <div id="adminUsers" class="admin-section">
+          <div class="admin-header"><h2>All Users</h2><span>Total: <b id="totalUsers">0</b></span></div>
+          <div id="usersList" class="users-grid"></div>
+        </div>
+        <div id="adminVerifications" class="admin-section hidden">
+          <h2>Pending Driver Verifications</h2>
+          <div id="verificationRequests" class="verif-grid"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
